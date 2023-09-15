@@ -1,16 +1,12 @@
-let plusButton, minusButton, counterValue;
 let count = 0;
 
-document.addEventListener("readystatechange", (event) => {
-  if (document.readyState === "complete") {
-    initElements();
-    updateCounter(0);
-    setupButtonClick();
-  }
+$(document).ready(() => {
+  console.log("ready");
+  setupButtonClick();
 });
 
 const updateCounter = (value) => {
-  counterValue.innerHTML = value;
+  $("#value").text(value);
 };
 
 const updateCounterValue = (by) => {
@@ -18,17 +14,11 @@ const updateCounterValue = (by) => {
   updateCounter(count);
 };
 
-function initElements() {
-  plusButton = document.querySelector("#plus-button");
-  minusButton = document.querySelector("#minus-button");
-  counterValue = document.querySelector("#value");
-}
-
 function setupButtonClick() {
-  plusButton.addEventListener("click", () => {
+  $("#plus-button").on("click", () => {
     updateCounterValue(+1);
   });
-  minusButton.addEventListener("click", () => {
+  $("#minus-button").on("click", () => {
     updateCounterValue(-1);
   });
 }
