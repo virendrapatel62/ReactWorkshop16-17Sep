@@ -1,9 +1,5 @@
 # Resources
 
-## recordings
-
-https://www.youtube.com/playlist?list=PLdBwVRHjcI__YJaDqZykowK0DRFxjCgkS
-
 ## React Formik
 
 https://formik.org/
