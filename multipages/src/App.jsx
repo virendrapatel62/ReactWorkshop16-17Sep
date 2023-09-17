@@ -1,34 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Orders from "./pages/Orders";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import OrderDetails from "./pages/OrderDetails";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+function AuthenticatedRoute(props) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
+  return <props.Page></props.Page>;
 }
 
-export default App
+function App() {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <header>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+          <li>
+            <Link to="/orders">Orders</Link>
+          </li>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
+
+          <li>
+            <a
+              onClick={() => {
+                localStorage.clear();
+                navigate("/login");
+              }}
+            >
+              Logout
+            </a>
+          </li>
+        </ul>
+      </header>
+
+      <main>
+        <Routes>
+          <Route path="" element={<AuthenticatedRoute Page={Home} />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/orders"
+            element={<AuthenticatedRoute Page={Orders} />}
+          ></Route>
+          <Route
+            path="/products"
+            element={<AuthenticatedRoute Page={Products} />}
+          ></Route>
+          <Route
+            path="/product/:id"
+            element={<AuthenticatedRoute Page={ProductDetails} />}
+          ></Route>
+          <Route
+            path="/orders/:id"
+            element={<AuthenticatedRoute Page={OrderDetails} />}
+          ></Route>
+          <Route path="*" element={<h1>Not Found</h1>}></Route>
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
+export default App;
